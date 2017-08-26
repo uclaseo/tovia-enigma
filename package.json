@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/uclaseo/tovia-enigma#readme",
   "dependencies": {
+    "express": "^4.15.4",
     "react": "^15.6.1",
     "react-dom": "^15.6.1"
   },
