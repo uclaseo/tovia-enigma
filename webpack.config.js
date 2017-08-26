@@ -1,0 +1,37 @@
+const path = require('path');
+// const HtmlWebpackPlugin = require('html-webpack-plugin');
+// const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
+//   template: './public/index.html',
+//   filename: 'index.html',
+//   inject: 'body'
+// })
+
+module.exports = {
+  entry: './public/index.js',
+  output: {
+    path: path.join(__dirname, '/static'),
+    publicPath: '/static',
+    filename: 'bundle.js'
+  },
+  module: {
+    loaders: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/,
+        query: {
+          presets: ["es2015", "react"]
+        }
+      },
+      {
+        test: /\.jsx$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/,
+        query: {
+          presets: ["es2015", "react"]
+        }
+      }
+    ]
+  }
+  // plugins: [HtmlWebpackPluginConfig]
+};
