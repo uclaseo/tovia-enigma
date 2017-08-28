@@ -11,16 +11,27 @@ const currentDate = new Date();
 // input fields(name, message)
 import Input from 'react-toolbox/lib/input';
 
-
+// dialog
+import Dialog from 'react-toolbox/lib/dialog';
 
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       name: '',
-      message: ''
+      message: '',
+      date: '',
+      passphrase: '',
+      isDialogActive: false
     };
+    this.handleDialogToggle = this.handleDialogToggle.bind(this);
+    this.generatePassphrase = this.generatePassphrase.bind(this);
   }
+
+  componentDidMount() {
+    this.generatePassphrase();
+  }
+  
 
   handleChange(item, value) {
     this.setState(
@@ -30,6 +41,33 @@ export default class App extends Component {
       }
     );
   }
+
+  handleDialogToggle() {
+    this.setState(
+      {
+        isDialogActive: !this.state.isDialogActive
+      }
+    );
+  }
+
+  dialogButtons = [
+    {label: "Close", onClick: this.handleDialogToggle.bind(this)},
+    {label: "Decrypt", onClick: this.handleDialogToggle.bind(this)}
+  ]
+
+  clickEncrypt() {
+
+  }
+  clickDecrypt() {
+
+  }
+
+  generatePassphrase() {
+    this.setState({
+      passphrase: Math.random().toString(36).slice(-8)
+    })
+  }
+
 
   render() {
     return (
@@ -63,11 +101,21 @@ export default class App extends Component {
             value={this.state.date}
           />
           <CardActions>
-            <Button label="ENCRYPT" />
-            <Button label="DECRYPT" />
+            <Button label="ENCRYPT" onClick={this.handleDialogToggle} />
+            <Dialog
+              actions={this.dialogButtons}
+              active={this.state.isDialogActive}
+              onEscKeyDown={this.handleDialogToggle}
+              onOverlayClick={this.handleDialogToggle}
+              title='De/Encrypt'
+            >
+              <p> HELLO.  ADD ARBITRATY CONTENT</p>
+            </Dialog>
+            <Button label="DECRYPT" onClick={this.handleDialogToggle} />
           </CardActions>
         </Card>
-
+        <p>Your Passphrase - {this.state.passphrase}</p>
+        <p onClick={this.generatePassphrase}>Generate new Passphrase</p>
         
       </div>
     )

@@ -26085,6 +26085,10 @@ var _input = __webpack_require__(117);
 
 var _input2 = _interopRequireDefault(_input);
 
+var _dialog = __webpack_require__(278);
+
+var _dialog2 = _interopRequireDefault(_dialog);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -26105,6 +26109,9 @@ var currentDate = new Date();
 
 // input fields(name, message)
 
+
+// dialog
+
 var App = function (_Component) {
   _inherits(App, _Component);
 
@@ -26113,17 +26120,49 @@ var App = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
+    _this.dialogButtons = [{ label: "Close", onClick: _this.handleDialogToggle.bind(_this) }, { label: "Decrypt", onClick: _this.handleDialogToggle.bind(_this) }];
+
     _this.state = {
       name: '',
-      message: ''
+      message: '',
+      date: '',
+      passphrase: '',
+      isDialogActive: false
     };
+    _this.handleDialogToggle = _this.handleDialogToggle.bind(_this);
+    _this.generatePassphrase = _this.generatePassphrase.bind(_this);
     return _this;
   }
 
   _createClass(App, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.generatePassphrase();
+    }
+  }, {
     key: 'handleChange',
     value: function handleChange(item, value) {
       this.setState(_extends({}, this.state, _defineProperty({}, item, value)));
+    }
+  }, {
+    key: 'handleDialogToggle',
+    value: function handleDialogToggle() {
+      this.setState({
+        isDialogActive: !this.state.isDialogActive
+      });
+    }
+  }, {
+    key: 'clickEncrypt',
+    value: function clickEncrypt() {}
+  }, {
+    key: 'clickDecrypt',
+    value: function clickDecrypt() {}
+  }, {
+    key: 'generatePassphrase',
+    value: function generatePassphrase() {
+      this.setState({
+        passphrase: Math.random().toString(36).slice(-8)
+      });
     }
   }, {
     key: 'render',
@@ -26164,9 +26203,35 @@ var App = function (_Component) {
           _react2.default.createElement(
             _card.CardActions,
             null,
-            _react2.default.createElement(_button.Button, { label: 'ENCRYPT' }),
-            _react2.default.createElement(_button.Button, { label: 'DECRYPT' })
+            _react2.default.createElement(_button.Button, { label: 'ENCRYPT', onClick: this.handleDialogToggle }),
+            _react2.default.createElement(
+              _dialog2.default,
+              {
+                actions: this.dialogButtons,
+                active: this.state.isDialogActive,
+                onEscKeyDown: this.handleDialogToggle,
+                onOverlayClick: this.handleDialogToggle,
+                title: 'De/Encrypt'
+              },
+              _react2.default.createElement(
+                'p',
+                null,
+                ' HELLO.  ADD ARBITRATY CONTENT'
+              )
+            ),
+            _react2.default.createElement(_button.Button, { label: 'DECRYPT', onClick: this.handleDialogToggle })
           )
+        ),
+        _react2.default.createElement(
+          'p',
+          null,
+          'Your Passphrase - ',
+          this.state.passphrase
+        ),
+        _react2.default.createElement(
+          'p',
+          { onClick: this.generatePassphrase },
+          'Generate new Passphrase'
         )
       );
     }
