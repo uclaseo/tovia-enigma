@@ -25933,6 +25933,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(4);
@@ -25942,6 +25944,10 @@ var _react2 = _interopRequireDefault(_react);
 var _date_picker = __webpack_require__(217);
 
 var _date_picker2 = _interopRequireDefault(_date_picker);
+
+var _input = __webpack_require__(263);
+
+var _input2 = _interopRequireDefault(_input);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -25953,7 +25959,12 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var min_datetime = new Date();
+// date 
+
+
+var currentDate = new Date();
+
+// input fields(name, message)
 
 var App = function (_Component) {
   _inherits(App, _Component);
@@ -25963,15 +25974,17 @@ var App = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
-    _this.state = {};
-
+    _this.state = {
+      name: '',
+      message: ''
+    };
     return _this;
   }
 
   _createClass(App, [{
     key: 'handleChange',
     value: function handleChange(item, value) {
-      this.setState(Object.assign({}, _defineProperty({}, item, value)));
+      this.setState(_extends({}, this.state, _defineProperty({}, item, value)));
     }
   }, {
     key: 'render',
@@ -25982,9 +25995,24 @@ var App = function (_Component) {
         _react2.default.createElement(_date_picker2.default, {
           label: 'Expiration date',
           sundayFirstDayOfWeek: true,
-          minDate: min_datetime,
-          onChange: this.handleChange.bind(this, 'date2'),
-          value: this.state.date2
+          minDate: currentDate,
+          onChange: this.handleChange.bind(this, 'date'),
+          value: this.state.date
+        }),
+        _react2.default.createElement(_input2.default, {
+          type: 'text',
+          label: 'Name',
+          name: 'name',
+          onChange: this.handleChange.bind(this, 'name'),
+          value: this.state.name
+        }),
+        _react2.default.createElement(_input2.default, {
+          type: 'text',
+          label: 'Message',
+          name: 'message',
+          onChange: this.handleChange.bind(this, 'message'),
+          value: this.state.message,
+          maxLength: 120
         })
       );
     }
