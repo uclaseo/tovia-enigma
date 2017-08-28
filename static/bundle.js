@@ -26017,6 +26017,7 @@ var App = function (_Component) {
             type: 'text',
             label: 'Message',
             name: 'message',
+            multiline: true,
             onChange: this.handleChange.bind(this, 'message'),
             value: this.state.message,
             maxLength: 120

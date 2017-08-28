@@ -50,6 +50,7 @@ export default class App extends Component {
             type='text'
             label='Message'
             name='message'
+            multiline
             onChange={this.handleChange.bind(this, 'message')}
             value={this.state.message}
             maxLength={120}
