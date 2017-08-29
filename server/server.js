@@ -26,14 +26,10 @@ decrypt = (text) => {
   decrypted += decipher.final('utf8');
   return decrypted;
 };
-
 router.post('/encode/:passphrase', (req, res) => {
-  let name = req.body.name;
-  let message = req.body.message;
-  let date = req.body.date;
-  passphrase = req.params.passphrase;
-  let encrypted = encrypt(message);
-  console.log(encrypted);
+  passphrase = req.params.passphrase
+  let stringifiedData = JSON.stringify(req.body);
+  let encrypted = encrypt(stringifiedData);
   res.send(encrypted);
 });
 router.post('/decode/:passphrase', (req, res) => {

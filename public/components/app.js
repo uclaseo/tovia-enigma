@@ -64,7 +64,7 @@ export default class App extends Component {
       name: this.state.name,
       message: this.state.message,
       date: this.state.date,
-    }
+    };
     let passphrase = this.state.passphrase;
     axios.post(`/encode/${passphrase}`, data)
     .then((res, req) => {
@@ -73,7 +73,7 @@ export default class App extends Component {
       })
     })
     .catch((error) => {
-      console.log('error in clickEncrypt occured', error);
+      console.log('error in clickEncrypt: ', error);
     })
   }
   clickDialogDecrypt() {
@@ -83,12 +83,16 @@ export default class App extends Component {
     let passphrase = this.state.passphrase;
     axios.post(`/decode/${passphrase}`, data)
     .then((res, req) => {
+      let expirationDate = JSON.stringify(res.data.date);
+      expirationDate = new Date(JSON.parse(expirationDate));
       this.setState({
-        message: res.data
+        name: res.data.name,
+        message: res.data.message,
+        date: expirationDate
       });
     })
     .catch((error) => {
-      console.log(error);
+      console.log('error in clickDialogDecrypt: ', error);
     })
     this.handleDialogToggle();
   }
@@ -153,13 +157,14 @@ export default class App extends Component {
               label='passphrase'
               name='passphrase'
               onChange={this.handleChange.bind(this, 'passphrase')}
+              value={this.state.passphrase}
               />
             </Dialog>
             <Button label="DECRYPT" onClick={() => {this.handleDialogToggle()}} />
           </CardActions>
         </Card>
         <p>Your Passphrase - {this.state.passphrase}</p>
-        <p onClick={this.generatePassphrase}>Generate new Passphrase</p>
+        <p onClick={this.generatePassphrase}>Generate New Passphrase</p>
         
       </div>
     )

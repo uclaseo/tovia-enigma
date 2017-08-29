@@ -26174,7 +26174,7 @@ var App = function (_Component) {
           encrypted: res.data
         });
       }).catch(function (error) {
-        console.log('error in clickEncrypt occured', error);
+        console.log('error in clickEncrypt: ', error);
       });
     }
   }, {
@@ -26187,11 +26187,15 @@ var App = function (_Component) {
       };
       var passphrase = this.state.passphrase;
       _axios2.default.post('/decode/' + passphrase, data).then(function (res, req) {
+        var expirationDate = JSON.stringify(res.data.date);
+        expirationDate = new Date(JSON.parse(expirationDate));
         _this3.setState({
-          message: res.data
+          name: res.data.name,
+          message: res.data.message,
+          date: expirationDate
         });
       }).catch(function (error) {
-        console.log(error);
+        console.log('error in clickDialogDecrypt: ', error);
       });
       this.handleDialogToggle();
     }
@@ -26267,7 +26271,8 @@ var App = function (_Component) {
                 type: 'text',
                 label: 'passphrase',
                 name: 'passphrase',
-                onChange: this.handleChange.bind(this, 'passphrase')
+                onChange: this.handleChange.bind(this, 'passphrase'),
+                value: this.state.passphrase
               })
             ),
             _react2.default.createElement(_button.Button, { label: 'DECRYPT', onClick: function onClick() {
@@ -26284,7 +26289,7 @@ var App = function (_Component) {
         _react2.default.createElement(
           'p',
           { onClick: this.generatePassphrase },
-          'Generate new Passphrase'
+          'Generate New Passphrase'
         )
       );
     }
