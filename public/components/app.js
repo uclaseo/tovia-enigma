@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import axios from 'axios';
 
 // card (structure)
 import {Card, CardMedia, CardTitle, CardText, CardActions} from 'react-toolbox/lib/card';
@@ -22,10 +23,13 @@ export default class App extends Component {
       message: '',
       date: '',
       passphrase: '',
-      isDialogActive: false
+      isDialogActive: false,
+      encrypted: ''
     };
     this.handleDialogToggle = this.handleDialogToggle.bind(this);
     this.generatePassphrase = this.generatePassphrase.bind(this);
+    this.clickEncrypt = this.clickEncrypt.bind(this);
+    this.clickDialogDecrypt = this.clickDialogDecrypt.bind(this);
   }
 
   componentDidMount() {
@@ -52,14 +56,41 @@ export default class App extends Component {
 
   dialogButtons = [
     {label: "Close", onClick: this.handleDialogToggle.bind(this)},
-    {label: "Decrypt", onClick: this.handleDialogToggle.bind(this)}
+    {label: "Decrypt", onClick: this.clickDialogDecrypt.bind(this)}
   ]
 
   clickEncrypt() {
-
+    let data = {
+      name: this.state.name,
+      message: this.state.message,
+      date: this.state.date,
+    }
+    let passphrase = this.state.passphrase;
+    axios.post(`/encode/${passphrase}`, data)
+    .then((res, req) => {
+      this.setState({
+        encrypted: res.data
+      })
+    })
+    .catch((error) => {
+      console.log('error in clickEncrypt occured', error);
+    })
   }
-  clickDecrypt() {
-
+  clickDialogDecrypt() {
+    let data = {
+      encrypted: this.state.encrypted
+    };
+    let passphrase = this.state.passphrase;
+    axios.post(`/decode/${passphrase}`, data)
+    .then((res, req) => {
+      this.setState({
+        message: res.data
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+    this.handleDialogToggle();
   }
 
   generatePassphrase() {
@@ -101,7 +132,7 @@ export default class App extends Component {
             value={this.state.date}
           />
           <CardActions>
-            <Button label="ENCRYPT" onClick={this.handleDialogToggle} />
+            <Button label="ENCRYPT" onClick={() => {this.clickEncrypt(); this.handleDialogToggle()}} />
             <Dialog
               actions={this.dialogButtons}
               active={this.state.isDialogActive}
@@ -109,9 +140,22 @@ export default class App extends Component {
               onOverlayClick={this.handleDialogToggle}
               title='De/Encrypt'
             >
-              <p> HELLO.  ADD ARBITRATY CONTENT</p>
+              <Input
+                type='text'
+                label='encrypted message'
+                name='encryptedmessage'
+                multiline
+                onChange={this.handleChange.bind(this, 'encrypted')}
+                value={this.state.encrypted}
+              />
+              <Input
+              type='text'
+              label='passphrase'
+              name='passphrase'
+              onChange={this.handleChange.bind(this, 'passphrase')}
+              />
             </Dialog>
-            <Button label="DECRYPT" onClick={this.handleDialogToggle} />
+            <Button label="DECRYPT" onClick={() => {this.handleDialogToggle()}} />
           </CardActions>
         </Card>
         <p>Your Passphrase - {this.state.passphrase}</p>

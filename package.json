@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/uclaseo/tovia-enigma#readme",
   "dependencies": {
+    "axios": "^0.16.2",
     "body-parser": "^1.17.2",
     "css-loader": "^0.28.5",
     "express": "^4.15.4",
