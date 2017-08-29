@@ -85,14 +85,21 @@ export default class App extends Component {
     .then((res, req) => {
       let expirationDate = JSON.stringify(res.data.date);
       expirationDate = new Date(JSON.parse(expirationDate));
-      this.setState({
-        name: res.data.name,
-        message: res.data.message,
-        date: expirationDate
-      });
+      let currentDate = new Date();
+      let isExpired = (currentDate > expirationDate);
+      if (isExpired) {
+        alert('The message is expired');
+      } else {
+        this.setState({
+          name: res.data.name,
+          message: res.data.message,
+          date: expirationDate
+        });
+      }
     })
     .catch((error) => {
       console.log('error in clickDialogDecrypt: ', error);
+      alert('The encrypted message or passphrase is invalid');
     })
     this.handleDialogToggle();
   }

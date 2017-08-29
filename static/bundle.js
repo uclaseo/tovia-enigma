@@ -26189,13 +26189,20 @@ var App = function (_Component) {
       _axios2.default.post('/decode/' + passphrase, data).then(function (res, req) {
         var expirationDate = JSON.stringify(res.data.date);
         expirationDate = new Date(JSON.parse(expirationDate));
-        _this3.setState({
-          name: res.data.name,
-          message: res.data.message,
-          date: expirationDate
-        });
+        var currentDate = new Date();
+        var isExpired = currentDate > expirationDate;
+        if (isExpired) {
+          alert('The message is expired');
+        } else {
+          _this3.setState({
+            name: res.data.name,
+            message: res.data.message,
+            date: expirationDate
+          });
+        }
       }).catch(function (error) {
         console.log('error in clickDialogDecrypt: ', error);
+        alert('The encrypted message or passphrase is invalid');
       });
       this.handleDialogToggle();
     }
